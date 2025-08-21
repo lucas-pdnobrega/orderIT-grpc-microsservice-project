@@ -1,4 +1,4 @@
-# Go gRPC Microservices Example
+# OrderIT- Go gRPC Microservices Project
 
 [![Go Version](https://img.shields.io/badge/Go-1.22+-00ADD8.svg)](https://golang.org/)
 [![gRPC](https://img.shields.io/badge/gRPC-v1.64-00D4B1.svg)](https://grpc.io/)
@@ -34,4 +34,5 @@ The application's running now. Cudos.
 - The **Order Service** is available on port `3000`.
 - The **Payment Service** is available on port `3001`.
 - The **Shipping Service** is available on port `3002`.
+
 - The **MySQL Database** is accessible on port `3310`.
