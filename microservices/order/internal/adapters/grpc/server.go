@@ -32,11 +32,11 @@ func (a Adapter) Create(ctx context.Context, request *order.CreateOrderRequest) 
 
 	newOrder := domain.NewOrder(int64(request.CostumerId), orderItems)
 	result, err := a.api.PlaceOrder(newOrder)
-	code := status.Code(err)
-	if code == codes.InvalidArgument {
-		return nil, err
-	} else if err != nil {
-		return nil, status.New(codes.Internal, fmt.Sprintf("failed to order! %v ", err)).Err()
+	if err != nil {
+		if s, ok := status.FromError(err); ok {
+			return nil, s.Err()
+		}
+		return nil, status.Errorf(codes.Internal, "failed to order! %v", err)
 	}
 	return &order.CreateOrderResponse{OrderId: int32(result.ID)}, nil
 }

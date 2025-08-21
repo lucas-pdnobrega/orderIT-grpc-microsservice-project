@@ -26,7 +26,7 @@ type OrderItem struct {
 
 type InventoryItem struct {
 	gorm.Model
-	ProductCode string
+	ProductCode string		`gorm:"type:varchar(64);uniqueIndex"`
 	Name        string
 	UnitPrice   float32
 }
@@ -40,7 +40,7 @@ func NewAdapter(dataSourceUrl string) (*Adapter, error) {
 	if openErr != nil {
 		return nil, fmt.Errorf("db connection error: %v", openErr)
 	}
-	err := db.AutoMigrate(&Order{}, OrderItem{})
+	err := db.AutoMigrate(&Order{}, OrderItem{}, &InventoryItem{})
 	if err != nil {
 		return nil, fmt.Errorf("db migration error: %v", err)
 	}
@@ -93,12 +93,12 @@ func (a Adapter) FindInventoryItemByProductCode(code string) (domain.InventoryIt
 	var item InventoryItem
 	res := a.db.Table("inventory_items").Where("product_code = ?", code).First(&item)
 	if res.Error != nil {
-		return domain.InventoryItem{}, res.Error
-	}
-	return domain.InventoryItem{
-		ID:          uint(item.ID),
-		ProductCode: item.ProductCode,
-		Name:        item.Name,
-		UnitPrice:   item.UnitPrice,
-	}, nil
+        return domain.InventoryItem{}, res.Error
+    }
+    return domain.InventoryItem{
+        ID:          uint(item.ID),
+        ProductCode: item.ProductCode,
+        Name:        item.Name,
+        UnitPrice:   item.UnitPrice,
+    }, nil
 }
